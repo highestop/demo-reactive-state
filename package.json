@@ -1,9 +1,6 @@
 {
     "name": "reactive-state",
-    "description": "响应式状态控制器",
-    "author": "highestop",
     "version": "1.0.0",
-    "license": "MIT",
     "dependencies": {
         "react": "^18.2.0",
         "rxjs": "^7.8.0"
