@@ -26,6 +26,7 @@ function createServerState<T extends ServerStateToken>(
     defaultValue?: ServerStateTokenTypeMap[T]
 ): IServerStateController<ServerStateTokenTypeMap[T] | undefined> {
     let service: IServerStateService | null = null
+    let closed = false
     const callbacks: Set<(state: ServerStateTokenTypeMap[T] | undefined) => void> = new Set()
     const getState = () => {
         if (service) {
@@ -34,21 +35,31 @@ function createServerState<T extends ServerStateToken>(
         return defaultValue
     }
     const setState = (state: ServerStateTokenTypeMap[T] | undefined) => {
+        if (closed) {
+            throw Error('ReactiveState 已经被关闭')
+        }
         callbacks.forEach((callback) => callback(state))
     }
     const subscribe = (callback: (state: ServerStateTokenTypeMap[T] | undefined) => void) => {
+        if (closed) {
+            throw Error('ReactiveState 已经被关闭')
+        }
         callbacks.add(callback)
         return () => callbacks.delete(callback)
     }
     const connect = (_service: IServerStateService) => {
+        if (closed) {
+            throw Error('ReactiveState 已经被关闭')
+        }
         service = _service
         service.register(token, setState)
     }
     const close = () => {
         if (service) {
-            service?.unregister(token, setState)
+            service.unregister(token, setState)
         }
         callbacks.clear()
+        closed = true
     }
     return { connect, getState, subscribe, close }
 }
