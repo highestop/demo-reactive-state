@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { IStoreStateData, IStoreAfterCreate, IStoreLocalStateKey } from './store'
+import { IStoreStateData, IStoreAfterCreate, IStoreStateKey } from './store'
 
 export function useStoreContext<T extends IStoreStateData>(store: IStoreAfterCreate<T>) {
     const getState = <K extends keyof T>(key: K) => {
@@ -13,8 +13,8 @@ export function useStoreContext<T extends IStoreStateData>(store: IStoreAfterCre
         return state
     }
     const setState =
-        <K extends IStoreLocalStateKey<T>>(key: K) =>
-            (state: ReturnType<T[K]['getValue']>) =>
+        <K extends IStoreStateKey<T>>(key: K) =>
+            (state: ReturnType<T[K]['getState']>) =>
                 store.setState(key, state)
     return {
         useState: getState,

@@ -1,35 +1,35 @@
 import { Observable, BehaviorSubject } from "rxjs"
 
-export interface IRemoteStateService {
+export interface IServerStateService {
     register: <K, V>(token: K, setState: (state: V) => void) => void
     unregister: <K, V>(token: K, setState: (state: V) => void) => void
 }
 
-export interface IRemoteState<T = any> {
+export interface IServerState<T = any> {
     observableState: Observable<T>
     closeState: () => void
-    connectService: (service: IRemoteStateService) => void
-    getValue: () => T
+    connectService: (service: IServerStateService) => void
+    getState: () => T
 }
 
-export function createRemoteState<K, V>(
+export function createServerState<K, V>(
     token: K
-): IRemoteState<V | undefined>
-export function createRemoteState<K, V>(
+): IServerState<V | undefined>
+export function createServerState<K, V>(
     token: K,
     defaultValue: V
-): IRemoteState<V>
-export function createRemoteState<K, V>(
+): IServerState<V>
+export function createServerState<K, V>(
     token: K,
     defaultValue?: V
-): IRemoteState<V | undefined> {
+): IServerState<V | undefined> {
     const _state$ = new BehaviorSubject<V | undefined>(defaultValue)
-    const getValue = () => _state$.value
+    const getState = () => _state$.value
     const setValue = (nextValue: V | undefined) => _state$.next(nextValue)
     let closeState = () => {
         _state$.complete()
     }
-    const connectService = (service: IRemoteStateService) => {
+    const connectService = (service: IServerStateService) => {
         service.register(token, setValue)
         closeState = () => {
             service.unregister(token, setValue)
@@ -40,6 +40,6 @@ export function createRemoteState<K, V>(
         observableState: _state$.asObservable(),
         closeState,
         connectService,
-        getValue
+        getState
     }
 }

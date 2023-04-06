@@ -1,13 +1,13 @@
 import { Subject, takeUntil } from "rxjs"
-import { ILocalState } from "./local-state"
-import { IRemoteState } from "./remote-state"
+import { IState } from "./create-state"
+import { IServerState } from "./server-state"
 
 export interface IStateSubscription {
     unsubscribe: () => void
 }
 
 export function subscribeStateChange<T>(
-    state: ILocalState<T> | IRemoteState<T>,
+    state: IState<T> | IServerState<T>,
     callback: (state: T) => any
 ): IStateSubscription {
     const closeState$ = new Subject<void>()
