@@ -3,14 +3,14 @@ import { useStoreContext } from './use-store-context';
 
 // define states
 const storeFactory = (store: IStoreFactory) => ({
-	a: store.createLocalState<string>(),
-	b: store.createLocalStateUsingDefaultValue<string>('1'),
-	c: store.createRemoteState<'c', string>('c'),
+    a: store.createLocalState<string>(),
+    b: store.createLocalStateUsingDefaultValue<string>('1'),
+    c: store.createRemoteState<'c', string>('c'),
 });
 
 // build store
 export const store =
-	createStore<ReturnType<typeof storeFactory>>().createStates(storeFactory);
+    createStore<ReturnType<typeof storeFactory>>().createStates(storeFactory);
 export const { useState, useSetState } = useStoreContext(store);
 
 /////
@@ -40,11 +40,11 @@ store.closeStates();
 
 // use in hook
 function useStateHook() {
-	const aState = useState('a');
-	const bState = useState('b');
+    const aState = useState('a');
+    const bState = useState('b');
 
-	const aSetState = useSetState('a');
-	// const cSetState = useSetState('c') // cannot set state 'c' because it's remote
+    const aSetState = useSetState('a');
+    // const cSetState = useSetState('c') // cannot set state 'c' because it's remote
 
-	return null;
+    return null;
 }

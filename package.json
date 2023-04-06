@@ -1,13 +1,13 @@
 {
-	"name": "reactive-state",
-	"version": "1.0.0",
-	"dependencies": {
-		"observable-hooks": "^4.2.1",
-		"react": "^18.2.0",
-		"rxjs": "^7.8.0"
-	},
-	"devDependencies": {
-		"@types/react": "^18.0.26",
-		"prettier": "^2.8.7"
-	}
+    "name": "reactive-state",
+    "version": "1.0.0",
+    "dependencies": {
+        "observable-hooks": "^4.2.1",
+        "react": "^18.2.0",
+        "rxjs": "^7.8.0"
+    },
+    "devDependencies": {
+        "@types/react": "^18.0.26",
+        "prettier": "^2.8.7"
+    }
 }

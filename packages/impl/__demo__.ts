@@ -1,9 +1,9 @@
 import {
-	closeStates,
-	createState,
-	createStates,
-	exportStates,
-	StateFactory,
+    closeStates,
+    createState,
+    createStates,
+    exportStates,
+    StateFactory,
 } from './state-controller';
 import { StateStore } from './state-store';
 import { useState } from './use-state';
@@ -25,9 +25,9 @@ state2.subscribe((state) => console.log(state));
 
 // state group
 const states1 = createStates((create) => ({
-	state1: create(),
-	state2: create(1),
-	state3: create<string>(),
+    state1: create(),
+    state2: create(1),
+    state3: create<string>(),
 }));
 states1.state2.getState(); // 1
 states1.state2.setState(2); // 2
@@ -41,20 +41,20 @@ closeStates(states1); // earse all subscribers
 
 // state store
 class States2 extends StateStore<{
-	state1: any;
-	state2: number;
-	state3: string | undefined;
+    state1: any;
+    state2: number;
+    state3: string | undefined;
 }> {
-	constructor() {
-		super((create) => ({
-			state1: create(),
-			state2: create(1),
-			state3: create<string>(),
-		}));
-	}
-	updateState2(state: number) {
-		this.states.state2.setState(state);
-	}
+    constructor() {
+        super((create) => ({
+            state1: create(),
+            state2: create(1),
+            state3: create<string>(),
+        }));
+    }
+    updateState2(state: number) {
+        this.states.state2.setState(state);
+    }
 }
 const states2 = new States2();
 states2.useStates.state2.getState(); // can get
@@ -64,6 +64,6 @@ states2.useStates.state2.subscribe((state) => console.log(state)); // can subscr
 
 // use state in react hook
 function App() {
-	const state1_state = useState(state1); // any
-	useStateChangedCallback(state1, (state) => console.log(state));
+    const state1_state = useState(state1); // any
+    useStateChangedCallback(state1, (state) => console.log(state));
 }
