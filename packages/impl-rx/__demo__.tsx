@@ -1,5 +1,5 @@
 import { IStoreFactory, createStore } from "./store"
-import { createStoreContext } from "./store-context"
+import { useStoreContext } from "./use-store-context"
 
 // define states
 const storeFactory = (store: IStoreFactory) => ({
@@ -10,7 +10,7 @@ const storeFactory = (store: IStoreFactory) => ({
 
 // build store
 export const store = createStore<ReturnType<typeof storeFactory>>().createStates(storeFactory)
-export const { useState, useSetState } = createStoreContext(store)
+export const { useState, useSetState } = useStoreContext(store)
 
 /////
 
