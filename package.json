@@ -2,6 +2,7 @@
 	"name": "reactive-state",
 	"version": "1.0.0",
 	"dependencies": {
+		"observable-hooks": "^4.2.1",
 		"react": "^18.2.0",
 		"rxjs": "^7.8.0"
 	},

@@ -38,6 +38,11 @@ loose-envify@^1.1.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
+observable-hooks@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/observable-hooks/-/observable-hooks-4.2.1.tgz#67b676c81e8317fd92d93390dcb291f312fe9ecc"
+  integrity sha512-urZ0D28+oH+SRLQoCDd68rvvJIqK3zgH/Is0nubXDc+CF6d8rbDBN7A2n9mPAax7BtCRlwtnCBnkj8UwXRDf1Q==
+
 prettier@^2.8.7:
   version "2.8.7"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.7.tgz#bb79fc8729308549d28fe3a98fce73d2c0656450"
