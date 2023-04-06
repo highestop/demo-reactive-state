@@ -1,5 +1,5 @@
 {
-    "name": "reactive-state",
+    "name": "demo-reactive-state",
     "version": "1.0.0",
     "dependencies": {
         "observable-hooks": "^4.2.1",
