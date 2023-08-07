@@ -1,13 +1,18 @@
-export interface IStateController<T = any, R = T> {
+export interface IStateControllerBase<T = any, R = T> {
     setState: (state: T) => void;
     getState: () => R;
     subscribe: (callback: (state: T) => void) => () => void;
     close: () => void;
 }
 
-export type IReadonlyStateController<T, R = T> = Omit<
-    IStateController<T, R>,
-    'setState'
+export type IStateController<T = any, R = T> = Pick<
+    IStateControllerBase<T, R>,
+    'setState' | 'getState' | 'subscribe' | 'close'
+>;
+
+export type IReadonlyStateController<T, R = T> = Pick<
+    IStateControllerBase<T, R>,
+    'getState' | 'subscribe' | 'close'
 >;
 
 export function createState<T = any>(): IStateController<T | undefined>;
@@ -40,12 +45,37 @@ export function createState<T>(
     return { setState, getState, subscribe, close };
 }
 
+export type IStateControllerGroup<D extends { [key: string]: IStateControllerBase }> = {
+    [key in keyof D]: IStateController<ReturnType<D[key]['get']>>
+}
+
+export type IReadonlyStateControllerGroup<
+    D extends { [key: string]: IStateControllerBase },
+    K extends keyof D = keyof D
+> = {
+    [key in K]: IReadonlyStateController<ReturnType<D[key]['get']>>
+}
+
 export type StateFactory = typeof createState;
 
+export interface ICreateStatesTraceOption {
+    enableTracing?: boolean
+    globalId?: string
+}
+
 export function createStates<D extends { [key: string]: IStateController }>(
-    factory: (create: StateFactory) => D
-): D {
-    return factory(createState);
+    factory: (create: StateFactory) => D,
+    options?: ICreateStatesTraceOption
+): IStateControllerGroup<D> {
+    const states factory(createState);
+    if (option?.enableTracing) {
+        Object.keys(states).forEach((key) => {
+            const traceId = (option?.globalId ? `${option?.globalId}:` : '') + key;
+            console.debug(traceId, states[key].get());
+            states[key].subscribe((state) => console.debug(traceId, state));
+        });
+    }
+    return states;
 }
 
 export function closeStates<D extends { [key: string]: IStateController }>(
@@ -55,7 +85,7 @@ export function closeStates<D extends { [key: string]: IStateController }>(
 }
 
 export function exportStates<
-    D extends { [key: string]: IStateController<any> },
+    D extends { [key: string]: IStateController },
     K extends (keyof D)[]
 >(controllers: D, keys?: K) {
     const _keys = keys ?? (Object.keys(controllers) as K);
@@ -63,5 +93,25 @@ export function exportStates<
         states[key] = controllers[key];
         return states;
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    }, {} as { [key in K[number]]: IReadonlyStateController<ReturnType<D[key]['getState']>> });
+    }, {} as IReadonlyStateControllerGroup<D, K[number]>);
+}
+
+export function getStatesSnapshot<D extends { [key: string]: IStateControllerBase }, K extends (keyof D)[]>(
+    controllers: D
+) {
+    return (Object.keys(controllers) as K).reduce((states, key) => {
+        states[key] = controllers[key].get()
+        return states
+    }, {} as { [key in keyof D]: ReturnType<D[key]['get']> })
+}
+
+export type IStateControllerCollection<D extends { [key: string]: any }> = {
+    [key in keyof D]: IStateControllerBase<D[key]>
+}
+
+export function createStatesCollection<D extends { [key: string]: any }>(states: D) {
+    return Object.keys(states).reduce((createFactory, key: keyof D) => {
+        createFactory[key] = createState(states[key])
+        return createFactory
+    }, {} as IStateControllerCollection<D>)
 }
