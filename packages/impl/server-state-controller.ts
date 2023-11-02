@@ -41,7 +41,7 @@ function createServerState<T extends ServerStateToken>(
     };
     const setState = (state: ServerStateTokenTypeMap[T] | undefined) => {
         if (closed) {
-            throw Error('ReactiveState 已经被关闭');
+            throw Error('State 已经被关闭');
         }
         callbacks.forEach((callback) => callback(state));
     };
@@ -49,14 +49,14 @@ function createServerState<T extends ServerStateToken>(
         callback: (state: ServerStateTokenTypeMap[T] | undefined) => void
     ) => {
         if (closed) {
-            throw Error('ReactiveState 已经被关闭');
+            throw Error('State 已经被关闭');
         }
         callbacks.add(callback);
         return () => callbacks.delete(callback);
     };
     const connect = (_service: IServerStateService) => {
         if (closed) {
-            throw Error('ReactiveState 已经被关闭');
+            throw Error('State 已经被关闭');
         }
         service = _service;
         service.register(token, setState);
