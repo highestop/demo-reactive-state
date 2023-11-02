@@ -25,15 +25,3 @@ export class StateStore<D extends { [key: string]: any }> {
         closeStates(this.states);
     }
 }
-
-export function createStatesStore<D extends { [key: string]: any }>(
-    factory: (create: StateFactory) => {
-        [key in keyof D]: IMutableStateController<D[key]>;
-    },
-    exportKeys?: (keyof D)[]
-) {
-    const states = factory(createState);
-    const useStates = exportStates(states, exportKeys ?? []);
-    const close = () => closeStates(states);
-    return { useStates, close };
-}

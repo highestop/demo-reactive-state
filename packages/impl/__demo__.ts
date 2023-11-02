@@ -5,7 +5,7 @@ import {
     exportStates,
     StateFactory,
 } from './state-controller';
-import { createStatesStore, StateStore } from './state-store';
+import { StateStore } from './state-store';
 import { useState } from './use-state';
 import { useStateChangedCallback } from './use-state-changed-callback';
 
@@ -40,7 +40,7 @@ states1_readonly.state2.subscribe((state) => console.log(state)); // can be subs
 closeStates(states1); // earse all subscribers
 
 // state store
-class States2 extends StateStore<{
+class StatesStore extends StateStore<{
     state1: any;
     state2: number;
     state3: string | undefined;
@@ -56,22 +56,11 @@ class States2 extends StateStore<{
         this.states.state2.setState(state);
     }
 }
-const statesStore1 = new States2();
-statesStore1.useStates.state2.getState(); // can get
+const statesStore = new StatesStore();
+statesStore.useStates.state2.getState(); // can get
 // states2.useStates.state2.setState(2) // set methods are private
-statesStore1.updateState2(2); // can be set
-statesStore1.useStates.state2.subscribe((state) => console.log(state)); // can be subscribed
-
-// state group factory
-const statesStore2 = createStatesStore((create) => ({
-    state1: create(),
-    state2: create(1),
-    state3: create<string>(),
-}));
-statesStore2.useStates.state2.getState(); // can get
-// states2.useStates.state2.setState(2) // set methods are private
-// statesStore2.updateState2(2); // cannot be set
-statesStore2.useStates.state2.subscribe((state) => console.log(state)); // can be subscribed
+statesStore.updateState2(2); // can be set
+statesStore.useStates.state2.subscribe((state) => console.log(state)); // can be subscribed
 
 // use state in react hook
 function App() {
