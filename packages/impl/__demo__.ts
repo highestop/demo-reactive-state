@@ -1,10 +1,5 @@
-import {
-    closeStates,
-    createState,
-    createStates,
-    exportStates,
-    StateFactory,
-} from './state-controller';
+import { createState } from './state-controller';
+import { closeStates, createStates, exportStates } from './state-group';
 import { StateStore } from './state-store';
 import { useState } from './use-state';
 import { useStateChangedCallback } from './use-state-changed-callback';

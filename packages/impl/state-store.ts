@@ -1,11 +1,9 @@
 import {
-    closeStates,
     createState,
-    exportStates,
     IMutableStateController,
     IReadonlyStateController,
-    StateFactory,
 } from './state-controller';
+import { closeStates, exportStates, StateFactory } from './state-group';
 
 export class StateStore<D extends { [key: string]: any }> {
     protected states: { [key in keyof D]: IMutableStateController<D[key]> };
