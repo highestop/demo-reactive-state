@@ -1,15 +1,9 @@
-import { useEffect, useRef } from 'react';
-import { IReadonlyStateController } from './state-controller';
+import { useEffect } from 'react';
+import { IState } from './state';
 
-export function useStateChangedCallback<T>(
-    controller: IReadonlyStateController<T>,
-    callback: (state: T) => void
-) {
-    const unsubscribeCallback = useRef<(() => void) | null>(null);
-    if (!unsubscribeCallback.current) {
-        unsubscribeCallback.current = controller.subscribe(callback);
-    }
+export function useStateChangedCallback<T>(controller: IState<T>, callback: (state: T) => void) {
     useEffect(() => {
-        return () => unsubscribeCallback.current?.();
+        const unsubscribe = controller.subscribe(callback);
+        return unsubscribe;
     }, []);
 }
